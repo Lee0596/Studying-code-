@@ -1,14 +1,4 @@
-#include <stdio.h>
-int reverse(int number);
-int main()
-{
-	int n;
 
-	scanf("%d", &n);
-	printf("%d\n", reverse(n));
-
-	return 0;
-}
 int reverse(int number) {
 	int sum = 0, a = 0;
 	if (number < 0) {
