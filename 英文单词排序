@@ -1,0 +1,32 @@
+#include<stdio.h>
+#include<string.h>
+int main()
+{	
+	char input[30][30] ;
+	char temp[10] ;
+	int i = 0;
+	while (1) {
+		scanf("%s", input[i]);
+		if (input[i][0] == '#')
+			break;
+		i++;
+	}
+	input[i][0] = '\0';
+	int len = i;
+	int j = 0;
+	for (i = 0; i < len; i++)
+	{
+		for (j = 1; j < len - i; j++)
+		{
+			if (strlen(input[j - 1]) > strlen(input[j]))
+			{
+				strcpy(temp, input[j - 1]);
+				strcpy(input[j - 1], input[j]);
+				strcpy(input[j], temp);
+			}
+		}
+	}
+	for (i = 0; i < len; i++)
+		printf("%s ", input[i]);
+	return 0;
+}
