@@ -1,0 +1,13 @@
+void f( char *p ){
+  int i=0,j=0;
+  char temp;
+  for(i=0;*(p+i)!='\0';i++);
+  i-=1;
+  while(j<=i){
+    temp=*(p+i);
+    *(p+i)=*(p+j);
+    *(p+j)=temp;
+    i--;
+    j++;
+  }
+}
