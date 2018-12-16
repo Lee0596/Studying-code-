@@ -1,0 +1,31 @@
+#include<stdio.h>
+#include<string.h>
+struct book {
+	char name[1000];
+	double price;
+};
+int main()
+{
+	int i, n;
+	struct book s1[1000];
+	struct book max, min;
+	scanf("%d", &n);
+	for (i = 0; i < n; i++) {
+		scanf("\n");
+		gets(s1[i].name);
+		scanf("%lf",&s1[i].price);
+		if (i == 0) {
+			max = s1[i];
+			min = s1[i];
+		}
+		if (max.price < s1[i].price) {
+			max = s1[i];
+		}
+		if (min.price > s1[i].price) {
+			min = s1[i];
+		}
+	}
+	printf("%.2f, %s\n", max.price, max.name);
+	printf("%.2f, %s\n", min.price, min.name);
+	return 0;
+}
