@@ -71,7 +71,7 @@ int main() {
 		}
 		if (i == 3)    //退出程序
 		{
-			return 0;
+			break;
 		}
 	}
 	return 0;
