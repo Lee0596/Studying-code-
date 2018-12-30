@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {         //命令行参数
 		}
 		if (n == 2)          //查找数据
 		{   
-			int data, f, flag = 1, i = 0;
+			int data, f, flag = 1, i = 1;
 			if ((fp = fopen("E:\\C++\\text\\data.dat", "rb")) == NULL) {
 				printf("File open error!\n");
 				exit(0);
