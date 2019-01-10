@@ -2,7 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <conio.h>
-#include  <windows.h>
+#include  <windows.h>                                      //预编译头
+#define FILE_BUFFER_LENGTH 30000
 typedef struct employee                             //结构体保存职工信息
 {
 	int ID;                                         //ID号
@@ -15,13 +16,13 @@ typedef struct employee                             //结构体保存职工信�
 	float total;                                    //总工资
 	struct employee *next;                          //指向下一个节点
 }employee;
-typedef struct employeelist                         //排序时保存信息
+typedef struct employeelist                         
 {
 	int ID;
 	char name[10];
 	float base, salary, allowance, insurance, fund, total;
-}employeelist;
-struct employee *Funtionmenu(employee *head);       //功能选择菜单
+}employeelist;   //排序时保存信息
+struct employee *Funtionmenu(employee *head);       //功能选择
 struct employee *Create(employee *head);            //创建链表
 void Search(employee *head);                        //查找
 struct employee *Change(employee *head);            //修改
@@ -40,6 +41,7 @@ void Insurancebubble(employeelist*, int);           //按医疗保险从高到�
 void Fundbubble(employeelist*, int);                //按公积金从高到低排序
 void Totalbubble(employeelist*, int);               //按总工资从高到低排序
 int IsNULL(employee *head);                         //判断链表是否为空
+void DestroyList(employee *head);                   //退出时销毁链表
 void menu() {
 	printf("******************** 职工工资管理系统 ********************\n");
 	printf("*                    1-----输入职工信息                  *\n");
@@ -52,34 +54,34 @@ void menu() {
 	printf("*                    8-----保存职工信息                  *\n");
 	printf("*                    9-----退出程序                      *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
+}                                                   //主功能菜单                                                 
 void Searchmenu() {
 	printf("******************** 查询职工信息 ********************\n");
 	printf("*                    1-----按ID号查询                *\n");
 	printf("*                    2-----按姓名查询                *\n");
 	printf("*                    3-----返回                      *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
+}                                                   //查询功能菜单
 void Changemenu() {
 	printf("******************** 修改职工信息 ********************\n");
 	printf("*                    1-----查询ID号修改              *\n");
 	printf("*                    2-----查询姓名修改              *\n");
 	printf("*                    3-----返回                      *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
+}                                                    //修改功能菜单                           
 void Delmenu() {
 	printf("******************** 删除职工信息 ********************\n");
 	printf("*                    1-----查询ID号删除              *\n");
 	printf("*                    2-----查询姓名删除              *\n");
 	printf("*                    3-----返回                      *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
+}                                                     //删除功能菜单
 void Addmenu() {
 	printf("******************** 添加职工信息 ********************\n");
 	printf("*                    1-----输入ID号追加              *\n");
 	printf("*                    2-----返回                      *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
+}                                                    //追加功能菜单
 void Statisticsmenu() {
 	printf("**************************** 统计职工信息 ****************************\n");
 	printf("*                    1-----对职工信息进行排序                        *\n");
@@ -88,7 +90,7 @@ void Statisticsmenu() {
 	printf("*                    4-----打印全部职工工资信息表                    *\n");
 	printf("*                    5-----返回                                      *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
+}                                                    //统计功能菜单
 void Sortmenu() {
 	printf("******************** 职工信息排序 ********************\n");
 	printf("*                    1-----按ID号从小到大            *\n");
@@ -100,14 +102,14 @@ void Sortmenu() {
 	printf("*                    7-----按总工资从大到小          *\n");
 	printf("*                    8-----返回                      *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
+}                                                    //排序功能菜单
 void quitmenu() {
 	printf("****************************退出菜单 ****************************\n");
 	printf("*                    1-----确认已保存职工信息并退出             *\n");
 	printf("*                    2-----返回                                 *\n");
 	printf("*请根据编号选择您要进行的操作:");
-}
-struct employee *Funtionmenu(employee *head) {            //主功能菜单
+}                                                    //退出功能菜单
+employee *Funtionmenu(employee *head) {            //主功能菜单
 	int n;
 	while (1) {
 		system("cls");
@@ -142,8 +144,8 @@ struct employee *Funtionmenu(employee *head) {            //主功能菜单
 			head = Quit(head);
 		}
 	}
-}
-struct employee *Create(employee *head)               //创建链表
+}             //
+employee *Create(employee *head)               //创建链表
 {
 	if (head != NULL&&head->next!=NULL) {
 		printf("已存有职工信息，若要继续添请选择追加职工信息\n");
@@ -213,7 +215,7 @@ void Search(employee *head)                   //查询
 		flag = 1;
 		while (slect == 'Y' || slect == 'y') {                 // 是否继续查询
 			flag = 1;
-			employee *p = head;
+			employee *p = head->next;
 			system("cls");
 			printf("请输入要查询职工的ID号: ");
 			scanf("%d", &ID);
@@ -240,7 +242,7 @@ void Search(employee *head)                   //查询
 		flag = 1;
 		while (slect == 'Y' || slect == 'y') {                 // 是否继续查询
 			flag = 1;
-			employee *p = head;
+			employee *p = head->next;
 			system("cls");
 			printf("请输入要查询职工的姓名: ");
 			scanf("%s", &name);
@@ -263,7 +265,7 @@ void Search(employee *head)                   //查询
 		}
 	}
 }
-struct employee *Change(employee *head) {                    //修改
+employee *Change(employee *head) {                    //修改
 	int n;
 	int flag = 1, ID;
 	char name[10], slect;
@@ -388,8 +390,7 @@ struct employee *Change(employee *head) {                    //修改
 	}
 	return head;
 }
-
-struct employee *Del(employee *head)                    //删除
+employee *Del(employee *head)                    //删除
 {
 	int n;
 	int flag = 1;
@@ -412,7 +413,7 @@ struct employee *Del(employee *head)                    //删除
 		int ID;
 		char slect = 'Y', confirm;
 		while (slect == 'Y' || slect == 'y') {
-			employee *p = head, *q;
+			employee *p = head, *q = p;
 			system("cls");
 			flag = 1;
 			printf("输入要删除的职工ID: "); 
@@ -434,6 +435,7 @@ struct employee *Del(employee *head)                    //删除
 				confirm = Judge(confirm);
 				if (confirm == 'Y' || confirm == 'y') {
 					q->next = p->next;
+					free(p);
 					printf("ID号为 %04d 的职工信息成功删除\n", ID);
 				}
 			}
@@ -450,7 +452,7 @@ struct employee *Del(employee *head)                    //删除
 	if (n == 2) {                                        //按姓名删除
 		char slect = 'Y', name[10], confirm;
 		while (slect == 'Y' || slect == 'y') {
-			employee *p = head, *q;
+			employee *p = head, *q = p;
 			system("cls");
 			flag = 1;
 			printf("输入要删除的职工姓名: ");
@@ -472,6 +474,7 @@ struct employee *Del(employee *head)                    //删除
 				confirm = Judge(confirm);
 				if (confirm == 'Y' || confirm == 'y') {
 					q->next = p->next;
+					free(p);
 					printf("姓名为 %s 的职工信息成功删除\n", name);
 				}
 			}
@@ -487,8 +490,8 @@ struct employee *Del(employee *head)                    //删除
 		}
 	}
 	return head;
-}
-struct employee *Add(employee *head)                         //追加
+}                  
+employee *Add(employee *head)                         //追加
 {
 	if (IsNULL(head)) {
 		return head;
@@ -504,13 +507,13 @@ struct employee *Add(employee *head)                         //追加
 	default:printf("输入有误，请重新选择\n"); system("pause"); system("cls"); Add(head);
 		break;
 	}
-	char slect = 'Y', confirm;
-	employee *p, *q, *t;
+	char slect = 'Y', confirm = '#';
+	employee *p=NULL, *q, *t;
 	while (slect == 'Y' || slect == 'y') {
 		int flag = 0;
 		system("cls");
-		p = (employee*)malloc(sizeof(employee));
 		q = head->next;
+		p = (employee*)malloc(sizeof(employee));
 		printf("请按以下格式顺序输入职工信息\n");
 		printf("I      D:");
 		scanf("%d", &p->ID);
@@ -534,7 +537,7 @@ struct employee *Add(employee *head)                         //追加
 				printf("已经有ID为 %04d 的职工信息如下\n", ID);                  //有重复ID号
 				printf("ID        姓名      基本工资  职务工资  津贴      医疗保险  公积金    总工资\n");
 				printf("%04d      %-10s%-10.2f%-10.2f%-10.2f%-10.2f%-10.2f%-10.2f\n", q->ID, q->name, q->base, q->salary, q->allowance, q->insurance, q->fund, q->total);
-				printf("是否覆盖原有职工信息Y/N: ");                               //是否覆盖重复ID号
+				printf("是否覆盖原有职工信息Y/N: ");                               //是否覆盖重复
 				scanf(" %c", &confirm);
 				confirm = Judge(confirm);
 				if (confirm == 'Y' || confirm == 'y') {
@@ -568,42 +571,43 @@ struct employee *Add(employee *head)                         //追加
 }
 void Statistics(employee *head)                        //统计
 {
+	if (IsNULL(head)) {
+		return;
+	}
 	int n, i = 0, temp;
 	int total = 0;
-	if (IsNULL(head)) {
-		return head;
-	}
-	char slect = 'Y';
 	double sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, totalsum = 0;
 	double count1 = 0, count2 = 0, count3 = 0, count4 = 0;
-	employee *p = head->next;
-	employeelist *list = (employeelist *)malloc(sizeof(employeelist));
-	while (p) {
-		list[i].ID = p->ID;
-		strcpy(list[i].name, p->name);
-		list[i].base = p->base;
-		list[i].salary = p->salary;
-		list[i].allowance = p->allowance;
-		list[i].insurance = p->insurance;
-		list[i].fund = p->fund;
-		list[i].total = p->total;
+	//employeelist *list = (employeelist *)malloc(sizeof(employeelist));
+	employeelist list[10000];
+	employee *q = NULL;
+	q = head->next;
+	while (q!=NULL) {
+		list[i].ID = q->ID;
+		strcpy(list[i].name, q->name);
+		list[i].base = q->base;
+		list[i].salary = q->salary;
+		list[i].allowance = q->allowance;
+		list[i].insurance = q->insurance;
+		list[i].fund = q->fund;
+		list[i].total = q->total;
 		i++;
 		total += 1;
-		sum1 += p->base;
-		sum2 += p->salary;
-		sum3 += p->allowance;
-		sum4 += p->insurance;
-		sum5 += p->fund;
-		totalsum += p->total;
-		if (p->total > 3000) {
+		sum1 += q->base;
+		sum2 += q->salary;
+		sum3 += q->allowance;
+		sum4 += q->insurance;
+		sum5 += q->fund;
+		totalsum += q->total;
+		if (q->total > 3000) {
 			count4 += 1;
 		}
 		else {
-			if (p->total > 2000) {
+			if (q->total > 2000) {
 				count3 += 1;
 			}
 			else {
-				if (p->total > 1000) {
+				if (q->total > 1000) {
 					count2 += 1;
 				}
 				else {
@@ -611,8 +615,9 @@ void Statistics(employee *head)                        //统计
 				}
 			}
 		}
-		p = p->next;
+		q = q->next;
 	}
+	char slect = 'Y';
 	while (slect == 'Y' || slect == 'y') {
 		system("cls");
 		Statisticsmenu();
@@ -628,7 +633,7 @@ void Statistics(employee *head)                        //统计
 			break;
 		case 5:return;                      //返回
 			break;
-		default:printf("输入有误，请重新选择\n"); Statistics(head);
+		default:printf("输入有误，请重新选择\n"); system("pause"); Statistics(head);
 			break;
 		}
 		if (n == 1) {
@@ -678,6 +683,7 @@ void Statistics(employee *head)                        //统计
 			while (temp--) {
 				printf("%04d      %-10s%-10.2f%-10.2f%-10.2f%-10.2f%-10.2f%-10.2f\n", list[temp].ID, list[temp].name, list[temp].base, list[temp].salary, list[temp].allowance, list[temp].insurance, list[temp].fund, list[temp].total);
 			}
+			printf("当前共有 %d 条职工信息记录\n", total);
 		}
 		printf("是否继续统计职工信息Y/N:");                //是否继续统计
 		scanf(" %c", &slect);
@@ -707,7 +713,7 @@ void Save(employee *head)                      //保存文件
 	system("pause");
 	return;
 }
-struct employee *Load(employee *head)            //载入信息
+employee *Load(employee *head)            //载入信息
 {
 	FILE *fp;
 	if ((fp = fopen("E:\\C++\\text\\employee.txt", "r")) == NULL)                 //文件不存在
@@ -725,10 +731,10 @@ struct employee *Load(employee *head)            //载入信息
 	}
 	head = (employee*)malloc(sizeof(employee));
 	head->next = NULL;
-	employee *q;
-	employee *p;
+	employee *q, *p;
 	q = head;
 	p = (employee*)malloc(sizeof(employee));
+	p->next = NULL;
 	while (fscanf(fp, "%d %s %f %f %f %f %f %f", &p->ID, p->name, &p->base, &p->salary, &p->allowance, &p->insurance, &p->fund, &p->total) != EOF)
 	{
 		q->next = p;
@@ -741,20 +747,19 @@ struct employee *Load(employee *head)            //载入信息
 	system("pause");
 	return head;
 }
-struct employee *Quit(employee *head)                                      //退出菜单
+employee *Quit(employee *head)                                      //退出菜单
 {
 	quitmenu();
 	int n;
 	scanf("%d", &n);
 	switch (n) {
-	case 1:exit(0);
+	case 1:DestroyList(head);
 		break;
 	case 2:return head;                 //返回
 		break;
 	default:printf("输入有误，请重新选择\n"); system("pause"); system("cls"); Quit(head);
 		break;
 	}
-	return head;
 }
 char Judge(char ch) {
 	while (ch != 'Y' && ch != 'y' && ch != 'N' && ch != 'n') {
@@ -863,4 +868,16 @@ int IsNULL(employee *head) {
 	else {
 		return 0;
 	}
+}
+void DestroyList(employee *head) {
+	if (head == NULL || head->next == NULL) {
+		exit(0);
+	}
+	employee *p;
+	while (head) {
+		p = head->next;
+		free(head);
+		head = p;
+	}
+	exit(0);
 }
